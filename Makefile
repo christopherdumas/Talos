@@ -1,5 +1,5 @@
 OBJECTS = loader.o out.o framebuffer.o kmain.o
-CC = gcc
+CC = xgcc
 CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
 -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -std=c11 -c
 LDFLAGS = -T link.ld -melf_i386
