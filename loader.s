@@ -1,15 +1,22 @@
-extern main
-
 bits 32
-global loader
+section .text
+    ;; MULTIBOOT SPEC
+align 4
+    dd 0x1BADB002            ;magic
+    dd 0x00                  ;flags
+    dd - (0x1BADB002 + 0x00) ;checksum. m+f+c should be zero
 
-    KERNEL_STACK_SIZE equ 4096
+    STACK_SIZE equ 8192
+
+global start
+extern kmain
+
+start:
+    cli
+    mov esp, stack_space
+    call kmain
+    hlt
 
 section .bss
-align 4
-kernel_stack:
-    resb KERNEL_STACK_SIZE
-
-section .text
-    mov esp, kernel_stack + KERNEL_STACK_SIZE
-    call main
+    resb STACK_SIZE
+stack_space:

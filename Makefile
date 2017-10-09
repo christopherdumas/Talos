@@ -1,15 +1,19 @@
-OBJECTS = loader.o out.o framebuffer.o kmain.o
-CC = xgcc
-CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
--nostartfiles -nodefaultlibs -Wall -Wextra -Werror -std=c11 -c
-LDFLAGS = -T link.ld -melf_i386
-AS = nasm
-ASFLAGS = -f elf32
+OBJECTS := loader.o out.o framebuffer.o kmain.o
+
+CC      := ~/.local/bin/bin/i386-elf-gcc-7.2.0
+CFLAGS  := -m32 -nostdinc -fno-builtin -nostdlib -nostartfiles -nodefaultlibs -fno-stack-protector \
+         -Wall -Wextra -Werror -std=c11 -c
+
+LD      := ~/.local/bin/i386-elf/bin/ld
+LDFLAGS := -T link.ld -melf_i386 -nostdlib -nostartfiles -nodefaultlibs
+
+AS      := nasm
+ASFLAGS := -f elf32
 
 all: kernel.elf
 
 kernel.elf: $(OBJECTS)
-	~/.local/binutils/i386-unknown-linux-gnu/bin/ld $(LDFLAGS) $(OBJECTS) -o kernel.elf
+	$(LD) $(LDFLAGS) $(OBJECTS) -o kernel.elf
 
 os.iso: kernel.elf
 	cp kernel.elf iso/boot/kernel.elf

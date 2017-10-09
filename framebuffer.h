@@ -24,18 +24,11 @@
 #define LIGHT_BROWN   14
 #define WHITE         15
 
-unsigned int strlen(const char* str);
-
-void fb_write_char(unsigned int x, unsigned int y,
-                   char c, unsigned char fg, unsigned char bg);
-
-void fb_write(unsigned int x, unsigned int y,
-              const char* str, unsigned char fg, unsigned char bg);
-
-void fb_move_cursor(unsigned int x, unsigned int y);
-
-void fb_print(const char *buf);
-
+int buflen(const char* buf);
+void fb_putc(char c);
+void fb_print(const char* buf);
 void fb_println(const char *buf);
+void fb_clear(unsigned char color);
+void fb_move_cursor(unsigned int x, unsigned int y);
 
 #endif
