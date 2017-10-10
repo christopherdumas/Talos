@@ -31,6 +31,8 @@ typedef enum colors {
 void fb_putc(char c);
 void fb_print(string_t buf);
 void fb_println(string_t buf);
+void fb_printf(string_t str, ...);
+
 void fb_clear(color_t color);
 void fb_move_cursor(unsigned int x, unsigned int y);
 void fb_set_foreground(color_t color);

@@ -101,3 +101,37 @@ void serial_print(unsigned short com, string_t buf)
         serial_putc(com, buf[i]);
     }
 }
+
+void serial_printf(unsigned short com, string_t str, ...)
+{
+    va_list args;
+    va_start(args, str);
+
+    int on_flag = 0;
+    int len = buflen(str);
+    for (int i=0; i < len; i++) {
+        char c = str[i];
+
+        switch (c) {
+        case '%':
+            on_flag = 1;
+        default:
+            if (on_flag) {
+                switch (c) {
+                case 'i':
+                    serial_print(itoa(va_arg(args, int)));
+                    break;
+                case 's':
+                    serial_print(va_arg(args, const char*));
+                    break;
+                case 'b':
+                    serial_print(va_arg(args, char*));
+                    break;
+                }
+            } else {
+                serial_putc(c);
+            }
+        }
+    }
+    va_end(args);
+}

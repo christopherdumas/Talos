@@ -40,7 +40,8 @@ void fb_putc(char c)
 
 void fb_print(string_t buf)
 {
-    for (int i = 0; i < buflen(buf); i++) {
+    int len = buflen(buf);
+    for (int i = 0; i < len; i++) {
         fb_putc(buf[i]);
     }
 }
@@ -78,4 +79,38 @@ void fb_move_cursor(unsigned int x, unsigned int y)
 
     outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
     outb(FB_DATA_PORT,    cursor_pos);
+}
+
+void fb_printf(string_t str, ...)
+{
+    va_list args;
+    va_start(args, str);
+
+    int on_flag = 0;
+    int len = buflen(str);
+    for (int i=0; i < len; i++) {
+        char c = str[i];
+
+        switch (c) {
+        case '%':
+            on_flag = 1;
+        default:
+            if (on_flag) {
+                switch (c) {
+                case 'i':
+                    fb_print(itoa(va_arg(args, int)));
+                    break;
+                case 's':
+                    fb_print(va_arg(args, const char*));
+                    break;
+                case 'b':
+                    fb_print(va_arg(args, char*));
+                    break;
+                }
+            } else {
+                fb_putc(c);
+            }
+        }
+    }
+    va_end(args);
 }

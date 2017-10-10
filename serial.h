@@ -47,5 +47,6 @@ int serial_config_com1_defaults();
 
 void serial_putc(unsigned short com, char c);
 void serial_print(unsigned short com, string_t buf);
+void serial_printf(unsigned short com, string_t str, ...);
 
 #endif
