@@ -1,34 +1,40 @@
 #ifndef _INCLUDE_FB_H
 #define _INCLUDE_FB_H
 
-#define FB_COMMAND_PORT 0x3D4
-#define FB_DATA_PORT    0x3D5
+static const int FB_COMMAND_PORT = 0x3D4;
+static const int FB_DATA_PORT    = 0x3D5;
 
-#define FB_HIGH_BYTE_COMMAND 14
-#define FB_LOW_BYTE_COMMAND  15
+static const int FB_HIGH_BYTE_COMMAND = 14;
+static const int FB_LOW_BYTE_COMMAND  = 15;
 
-#define BLACK         0
-#define BLUE          1
-#define GREEN         2
-#define CYAN          3
-#define RED           4
-#define MAGNETA       5
-#define BROWN         6
-#define LIGHT_GREY    7
-#define DARK_GREY     8
-#define LIGHT_BLUE    9
-#define LIGHT_GREEN   10
-#define LIGHT_CYAN    11
-#define LIGHT_RED     12
-#define LIGHT_MAGNETA 13
-#define LIGHT_BROWN   14
-#define WHITE         15
+typedef enum Colors {
+    BLACK = 0,
+    BLUE,
+    GREEN,
+    CYAN,
+    RED,
+    MAGNETA,
+    BROWN,
+    LIGHT_GREY,
+    DARK_GREY,
+    LIGHT_BLUE,
+    LIGHT_GREEN,
+    LIGHT_CYAN,
+    LIGHT_RED,
+    LIGHT_MAGNETA,
+    LIGHT_BROWN,
+    WHITE
+} color_t;
 
-int buflen(const char* buf);
+typedef const char* string_t;
+
+int buflen(string_t buf);
 void fb_putc(char c);
-void fb_print(const char* buf);
-void fb_println(const char *buf);
-void fb_clear(unsigned char color);
+void fb_print(string_t buf);
+void fb_println(string_t buf);
+void fb_clear(color_t color);
 void fb_move_cursor(unsigned int x, unsigned int y);
+void fb_set_foreground(color_t color);
+void fb_set_background(color_t color);
 
 #endif
