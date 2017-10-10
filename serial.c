@@ -25,7 +25,7 @@ void serial_config_line(unsigned short com,
      * Value:   | 0 | 0 | 0 0 0 | 0 | 1 1 | = 0x03
      */
     outb(SERIAL_LINE_COMMAND_PORT(com),
-         dat_len | s << 2 | prty_bts << 3 | brk_ctrl << 6 | dlab << 7);
+         dat_len | stp_bts << 2 | prty_bts << 3 | brk_ctrl << 6 | dlab << 7);
 }
 
 void serial_config_line_default(unsigned short com)
@@ -45,7 +45,7 @@ void serial_config_buffer(unsigned short com,
      * Content: | lvl | bs | r | dma | clt | clr | e |
      */
     outb(SERIAL_FIFO_COMMAND_PORT(com),
-         e | clr_recvr << 1 | clr_transmn << 2 | access << 3 | 0 << 4 | bufsz << 5 | store_bytes << 6);
+         fifo_enabled | clr_recvr << 1 | clr_transmn << 2 | access << 3 | 0 << 4 | bufsz << 5 | store_bytes << 6);
 }
 
 void serial_config_buffer_default(unsigned short com)
@@ -65,7 +65,7 @@ void serial_config_modem(unsigned short com,
      * Content: | r | r | af | lb | ao2 | ao1 | rts | dtr |
      */
     outb(SERIAL_MODEM_COMMAND_PORT(com),
-        dtr | rtt << 1 | aux_out1 << 2 | aux_out2 << 3 | loopback << 4 | autoflow << 5 | 0 << 6 | 0 << 7)
+        dtr | rtt << 1 | aux_out1 << 2 | aux_out2 << 3 | loopback << 4 | autoflow << 5 | 0 << 6 | 0 << 7);
 }
 
 void serial_config_modem_default(unsigned short com)

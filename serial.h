@@ -1,6 +1,8 @@
 #ifndef _INCLUDE_S_H
 #define _INCLUDE_S_H
 
+#include "string.h"
+
 static const int SERIAL_COM1_BASE        = 0x3F8;
 
 #define SERIAL_DATA_PORT(base)           (base)

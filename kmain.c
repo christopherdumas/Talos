@@ -10,7 +10,7 @@ void kmain(void)
     fb_clear(BLACK);
 
     fb_set_foreground(MAGNETA);
-    fb_println("Welcome to TalOS Beta 2");
+    fb_println("Welcome to TalOS Beta 0.3");
     fb_set_foreground(WHITE);
 
     fb_println("TalOS stands for The Awesome Lisp OS");
