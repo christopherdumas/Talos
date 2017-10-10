@@ -1,13 +1,15 @@
 #ifndef _INCLUDE_FB_H
 #define _INCLUDE_FB_H
 
+#include "string.h"
+
 static const int FB_COMMAND_PORT = 0x3D4;
 static const int FB_DATA_PORT    = 0x3D5;
 
 static const int FB_HIGH_BYTE_COMMAND = 14;
 static const int FB_LOW_BYTE_COMMAND  = 15;
 
-typedef enum Colors {
+typedef enum colors {
     BLACK = 0,
     BLUE,
     GREEN,
@@ -26,9 +28,6 @@ typedef enum Colors {
     WHITE
 } color_t;
 
-typedef const char* string_t;
-
-int buflen(string_t buf);
 void fb_putc(char c);
 void fb_print(string_t buf);
 void fb_println(string_t buf);

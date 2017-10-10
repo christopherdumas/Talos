@@ -9,17 +9,6 @@ unsigned int cursor_y = 0;
 unsigned int foreground = WHITE;
 unsigned int background = BLACK;
 
-int buflen(string_t buf)
-{
-    char c = buf[0];
-    int tally = 0;
-
-    while (c != '\0')
-        c = buf[tally++];
-
-    return tally;
-}
-
 void fb_set_foreground(color_t color)
 {
     foreground = color;
