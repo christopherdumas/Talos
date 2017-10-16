@@ -1,6 +1,6 @@
 #include "string.h"
 
-int buflen(string_t buf)
+int strlen(string_t buf)
 {
     char c = buf[0];
     int tally = 0;
@@ -19,27 +19,28 @@ int atoi(string_t str)
     return res;
 }
 
-string_t itoa(int number, buffer_t str)
+void ntoa(int number, int base, char str[])
 {
-    int x, i = 0;
-    if (number < 0)
-        x = -number;
-    else
-        x = number;
+    char rstr[12];
+    int i = 0, n = number, j = 0;
 
-    while (x > 0) {
-        int digit = x % 10;
-        str[i++] = digit + '0';
-        x /= 10;
+    while (n > 0) {
+        rstr[i++] = "0123456789abcdef"[n % base];
+        n /= base;
     }
 
-    if (number < 0)
-        str[i++] = '-';
-
-    int len = i - 1;
-    for (int j = len; j > 0; j--) {
-        str[j] = str[len-j];
+    for (j = 0; j < 12; j++) {
+        str[j] = rstr[(i--)-1];
     }
 
-    return str;
+    if (number < 0) {
+        // Shift over
+        for (int j=1; j < i; j++)
+            str[j] = str[j - 1];
+        // Add sign
+        str[0] = '-';
+    }
+
+    // Add terminator
+    str[j] = '\0';
 }

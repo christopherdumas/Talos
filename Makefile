@@ -1,4 +1,4 @@
-OBJECTS := loader.o out.o framebuffer.o kmain.o serial.o string.o
+OBJECTS := loader.o out.o idt.o gdt.o interrupt.o keyboard.o framebuffer.o serial.o string.o kmain.o
 
 CC      := ~/.local/bin/bin/i386-elf-gcc-7.2.0
 CFLAGS  := -m32 -nostdinc -fno-builtin -nostdlib -nostartfiles -nodefaultlibs -fno-stack-protector \

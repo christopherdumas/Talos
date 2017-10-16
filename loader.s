@@ -10,10 +10,13 @@ align 4
 
 global start
 extern kmain
+extern ksetup
 
 start:
     cli
     mov esp, stack_space
+    call ksetup
+    sti
     call kmain
     hlt
 

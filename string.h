@@ -2,10 +2,9 @@
 #define _INCLUDE_STR_H
 
 typedef const char* string_t;
-typedef char* buffer_t;
 
-int buflen(string_t buf);
+int strlen(string_t buf);
 int atoi(string_t str);
-string_t itoa(int number, buffer_t str);
+void ntoa(int number, int base, char str[]);
 
 #endif

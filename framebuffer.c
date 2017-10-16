@@ -3,11 +3,9 @@
 
 volatile char* video = (volatile char*) 0xB8000;
 
-unsigned int cursor_x = 0;
-unsigned int cursor_y = 0;
+unsigned int cursor_x = 0, cursor_y = 0;
 
-unsigned int foreground = WHITE;
-unsigned int background = BLACK;
+unsigned int foreground = WHITE, background = BLACK;
 
 void fb_set_foreground(color_t color)
 {
@@ -22,25 +20,26 @@ void fb_set_background(color_t color)
 void fb_putc(char c)
 {
     unsigned int attrs = (background << 4) | foreground;
-    unsigned int cursor_pos = (80 * cursor_y * 2) + cursor_x * 2;
+    unsigned int cursor_pos = (80 * cursor_y) + cursor_x;
 
     switch (c) {
     case '\n':
-        cursor_y += 1;
+        cursor_y += 2;
+        cursor_x = 0;
         break;
 
     default:
         video[cursor_pos] = c;
         video[cursor_pos + 1] = attrs;
 
-        cursor_x += 1;
+        cursor_x += 2;
         break;
     }
 }
 
 void fb_print(string_t buf)
 {
-    int len = buflen(buf);
+    int len = strlen(buf)-1;
     for (int i = 0; i < len; i++) {
         fb_putc(buf[i]);
     }
@@ -49,7 +48,7 @@ void fb_print(string_t buf)
 void fb_println(string_t buf)
 {
     fb_print(buf);
-    cursor_y += 1;
+    cursor_y += 2;
     cursor_x = 0;
 }
 
@@ -69,10 +68,10 @@ void fb_clear(color_t color)
 
 void fb_move_cursor(unsigned int x, unsigned int y)
 {
-    cursor_x = x;
-    cursor_y = y;
+    cursor_x = x*2;
+    cursor_y = y*2;
 
-    unsigned int cursor_pos = y * 80 + x;
+    unsigned int cursor_pos = cursor_y * 80 + cursor_x;
 
     outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
     outb(FB_DATA_PORT,    cursor_pos >> 8);
@@ -81,36 +80,40 @@ void fb_move_cursor(unsigned int x, unsigned int y)
     outb(FB_DATA_PORT,    cursor_pos);
 }
 
-void fb_printf(string_t str, ...)
+
+void fb_printn(int arg, int rad)
 {
-    va_list args;
-    va_start(args, str);
+    char b[12];
+    ntoa(arg, rad, b);
+    fb_print(b);
+}
 
-    int on_flag = 0;
-    int len = buflen(str);
-    for (int i=0; i < len; i++) {
-        char c = str[i];
-
-        switch (c) {
-        case '%':
-            on_flag = 1;
-        default:
-            if (on_flag) {
-                switch (c) {
-                case 'i':
-                    fb_print(itoa(va_arg(args, int)));
-                    break;
-                case 's':
-                    fb_print(va_arg(args, const char*));
-                    break;
-                case 'b':
-                    fb_print(va_arg(args, char*));
-                    break;
-                }
-            } else {
-                fb_putc(c);
-            }
-        }
+void fb_print_log(log_level_t ll, string_t str)
+{
+    fb_print("[ ");
+    switch (ll)
+    {
+    case SUCCESS:
+        fb_set_foreground(GREEN);
+        fb_print(" ok ");
+        break;
+    case WARNING:
+        fb_set_foreground(BROWN);
+        fb_print("warn");
+        break;
+    case DANGER:
+        fb_set_foreground(RED);
+        fb_print("err ");
+        break;
     }
-    va_end(args);
+    fb_set_foreground(WHITE);
+    fb_print(" ] ");
+    fb_print(str);
+}
+
+void fb_println_log(log_level_t ll, string_t str)
+{
+    fb_print_log(ll, str);
+    cursor_y += 2;
+    cursor_x = 0;
 }
